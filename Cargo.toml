@@ -2,7 +2,7 @@
 name = "xplm210-sys"
 version = "0.1.0"
 authors = ["Sam Crow <samcrow@uw.edu>"]
-description = "Bindings for the X-Plane plugin SDK version 2.10"
+description = "Bindings for the X-Plane plugin SDK version 2.1"
 license = "MIT"
 
 build = "link.rs"
