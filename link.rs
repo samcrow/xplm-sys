@@ -9,11 +9,9 @@ fn main() {
     if target.contains("-apple-") {
         println!("cargo:rustc-link-search=framework=../XPLM/SDK/Libraries/Mac/");
         println!("cargo:rustc-link-lib=framework=XPLM");
-    }
-    else if target.contains("windows") {
-        panic!("Windows (target = {}) is not yet supported", target);
+        println!("cargo:rustc-link-lib=framework=XPWidgets");
     }
     else {
-        panic!("Other operating systems (target = {}) are not yet supported", target);
+        panic!("Windows (target = {}) is not yet supported", target);
     }
 }
