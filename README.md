@@ -9,8 +9,7 @@ the SDK header files.
 
 ## Compiling ##
 
-This library currently can only be compiled on Mac OS X. Support for other operating
-systems can be added easily by modifying `link.rs`.
+This library currently can be compiled on Mac OS, Linux, and Windows.
 
 ## License ##
 
