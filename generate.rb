@@ -3,7 +3,7 @@
 # Generates Rust bindings for the X-Plane plugin SDK
 
 # Path to the rust-bindgen executable
-BINDGEN = '../rust-bindgen/target/debug/bindgen'
+BINDGEN = 'bindgen'
 BINDGEN_OPTIONS = '-DAPL=1 -DXPLM200 -DXPLM210 -I./SDK/CHeaders/XPLM'
 # Configure library path for bindgen
 ENV['DYLD_LIBRARY_PATH'] = '/Library/Developer/CommandLineTools/usr/lib'
