@@ -7,19 +7,18 @@
 // notice may not be copied, modified, or distributed except
 // according to those terms.
 
+// Allow C-like conventions
 #![allow(non_upper_case_globals,non_camel_case_types,non_snake_case)]
 
-pub mod camera;
-pub mod data_access;
-pub mod defs;
-pub mod display;
-pub mod graphics;
-pub mod menus;
-pub mod navigation;
-pub mod planes;
-pub mod plugin;
-pub mod processing;
-pub mod scenery;
-pub mod utilities;
+// Link libraries for Mac OS and Windows
+#[cfg_attr(target_os = "macos", link(kind = "framework", name = "XPLM"))]
+#[cfg_attr(target_os = "macos", link(kind = "framework", name = "XPWidgets"))]
+#[cfg_attr(all(target_os = "windows", target_pointer_width = 32), link(name = "XPLM"))]
+#[cfg_attr(all(target_os = "windows", target_pointer_width = 32), link(name = "XPWidgets"))]
+#[cfg_attr(all(target_os = "windows", target_pointer_width = 64), link(name = "XPLM_64"))]
+#[cfg_attr(all(target_os = "windows", target_pointer_width = 64), link(name = "XPWidgets_64"))]
+extern {
 
-pub mod widgets;
+}
+
+include!(concat!(env!("OUT_DIR"), "/bindgen.rs"));
