@@ -10,15 +10,4 @@
 // Allow C-like conventions
 #![allow(non_upper_case_globals,non_camel_case_types,non_snake_case)]
 
-// Link libraries for Mac OS and Windows
-#[cfg_attr(target_os = "macos", link(kind = "framework", name = "XPLM"))]
-#[cfg_attr(target_os = "macos", link(kind = "framework", name = "XPWidgets"))]
-#[cfg_attr(all(target_os = "windows", target_pointer_width = 32), link(name = "XPLM"))]
-#[cfg_attr(all(target_os = "windows", target_pointer_width = 32), link(name = "XPWidgets"))]
-#[cfg_attr(all(target_os = "windows", target_pointer_width = 64), link(name = "XPLM_64"))]
-#[cfg_attr(all(target_os = "windows", target_pointer_width = 64), link(name = "XPWidgets_64"))]
-extern {
-
-}
-
 include!(concat!(env!("OUT_DIR"), "/bindgen.rs"));
