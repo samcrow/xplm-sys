@@ -1,6 +1,6 @@
 [package]
 name = "xplm-sys"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Sam Crow <samcrow@uw.edu>"]
 description = "Low-level bindings for the X-Plane plugin SDK"
 repository = "https://github.com/samcrow/xplm-sys"
@@ -12,3 +12,10 @@ build = "build.rs"
 
 [build-dependencies]
 bindgen = "^0.20.0"
+
+[features]
+# Enables SDK 2.0 features
+xplm200 = []
+# Enables SDK 2.1 features
+xplm210 = []
+default = ["xplm200", "xplm210"]
