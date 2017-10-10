@@ -1,6 +1,7 @@
 extern crate bindgen;
 
 use std::env;
+use std::env::VarError;
 use std::path::Path;
 
 fn main() {
@@ -18,28 +19,27 @@ fn generate_bindings() {
 
 fn configure_bindings() -> bindgen::Builder {
     let os_name = get_os_str();
-    let mut builder = bindgen::builder()
+    let sdk_version = SdkVersion::get().unwrap_or_else(|e| {
+        panic!("SDK version problem: {}", e);
+    });
+    bindgen::builder()
         // OS specification required
         .clang_arg(format!("-D{}=1", os_name))
         // Include directories
         .clang_arg("-ISDK/CHeaders/XPLM")
         .clang_arg("-ISDK/CHeaders/Widgets")
-        .no_unstable_rust()
+        .clang_args(sdk_version.args())
         // Add headers
-        .header("src/combined.h");
-
-    // SDK 2.0 and 2.1
-    if feature_enabled("xplm200").unwrap() {
-        builder = builder.clang_arg("-DXPLM200");
-    }
-    if feature_enabled("xplm210").unwrap() {
-        builder = builder.clang_arg("-DXPLM210");
-    }
-    builder
+        .header("src/combined.h")
+        // Tests can't run because the XPLM stub library is not found
+        .layout_tests(false)
+        // Interpret all XPLM enum as constants
+        // (like the headers)
+        .constified_enum("*")
 }
 
 /// Returns true if a feature with a provided name is enabled in the current build.
-fn feature_enabled(name: &str) -> Result<bool, ::std::env::VarError> {
+fn feature_enabled(name: &str) -> Result<bool, VarError> {
     let transformed_name = name.to_uppercase().replace('-', "_");
     let var_name = format!("CARGO_FEATURE_{}", transformed_name);
     match env::var(&var_name) {
@@ -92,5 +92,78 @@ fn link_libraries() {
     }
     else {
         panic!("Target operating system not Mac OS, Linux, or Windows")
+    }
+}
+
+enum SdkVersion {
+    Sdk100,
+    Sdk200,
+    Sdk210,
+    Sdk300,
+}
+
+static SDK100_ARGS: [&str; 0] = [];
+static SDK200_ARGS: [&str; 1] = ["-DXPLM200"];
+static SDK210_ARGS: [&str; 2] = ["-DXPLM200", "-DXPLM210"];
+static SDK300_ARGS: [&str; 3] = ["-DXPLM200", "-DXPLM210", "-DXPLM300"];
+
+impl SdkVersion {
+    pub fn get() -> Result<SdkVersion, SdkVersionError> {
+        let feature_xplm200 = feature_enabled("xplm200")?;
+        let feature_xplm210 = feature_enabled("xplm210")?;
+        let feature_xplm300 = feature_enabled("xplm300")?;
+        match (feature_xplm200, feature_xplm210, feature_xplm300) {
+            (false, false, false) => Ok(SdkVersion::Sdk100),
+            (true, false, false) => Ok(SdkVersion::Sdk200),
+            (false, true, false) => Ok(SdkVersion::Sdk210),
+            (false, false, true) => Ok(SdkVersion::Sdk300),
+            _ => Err(SdkVersionError::Feature("Only one of the xplm200, xplm210, or xplm300 features may be enabled"))
+        }
+    }
+
+    /// Returns the compiler arguments required to enable the features of this version
+    pub fn args(&self) -> &[&str] {
+        match *self {
+            SdkVersion::Sdk100 => &SDK100_ARGS,
+            SdkVersion::Sdk200 => &SDK200_ARGS,
+            SdkVersion::Sdk210 => &SDK210_ARGS,
+            SdkVersion::Sdk300 => &SDK300_ARGS,
+        }
+    }
+}
+
+#[derive(Debug)]
+enum SdkVersionError {
+    Var(VarError),
+    Feature(&'static str),
+}
+
+impl std::fmt::Display for SdkVersionError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            SdkVersionError::Var(ref inner) => std::fmt::Display::fmt(inner, f),
+            SdkVersionError::Feature(message) => std::fmt::Display::fmt(message, f),
+        }
+    }
+}
+
+impl std::error::Error for SdkVersionError {
+    fn cause(&self) -> Option<&std::error::Error> {
+        match *self {
+            SdkVersionError::Var(ref inner) => Some(inner),
+            SdkVersionError::Feature(_) => None,
+        }
+    }
+    fn description(&self) -> &str {
+        match *self {
+            SdkVersionError::Var(ref inner) => inner.description(),
+            SdkVersionError::Feature(message) => message,
+        }
+    }
+}
+
+impl From<VarError> for SdkVersionError {
+    fn from(inner: VarError) -> Self {
+        SdkVersionError::Var(inner)
     }
 }
