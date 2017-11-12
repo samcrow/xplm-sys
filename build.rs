@@ -33,9 +33,6 @@ fn configure_bindings() -> bindgen::Builder {
         .header("src/combined.h")
         // Tests can't run because the XPLM stub library is not found
         .layout_tests(false)
-        // Interpret all XPLM enum as constants
-        // (like the headers)
-        .constified_enum("*")
 }
 
 /// Returns true if a feature with a provided name is enabled in the current build.
