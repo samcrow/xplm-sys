@@ -4,15 +4,7 @@ This library provides Rust bindings to the X-Plane plugin SDK.
 
 ## SDK versions ##
 
-The X-Plane plugin SDK has four versions:
-
-* Version 1.0, supported by X-Plane 6.70 and up
-* Version 2.0, supported by X-Plane 9.00 and up
-* Version 2.1, supported by X-Plane 10.00 and up
-* Version 3.0, supported by X-Plane 11.10 and up
-
-Each version adds a few new features. To enable an SDK version, use the `xplm200`,
- `xplm210`, or `xplm300` cargo feature. Only one feature should be enabled.
+This crate supports SKD version 3.0, which is supported on X-Plane 11.0 and later.
 
 ## Documentation ##
 
