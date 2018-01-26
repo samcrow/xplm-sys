@@ -1,5 +1,4 @@
 use std::env;
-use std::env::VarError;
 use std::path::Path;
 
 fn main() {
