@@ -1,36 +1,14 @@
 use std::env;
-use std::path::Path;
+use std::path::PathBuf;
 
 fn main() {
     link_libraries();
 }
 
-//fn configure_bindings() -> bindgen::Builder {
-//    let os_name = get_os_str();
-//    let sdk_version = SdkVersion::get().unwrap_or_else(|e| {
-//        panic!("SDK version problem: {}", e);
-//    });
-//    bindgen::builder()
-//        // OS specification required
-//        .clang_arg(format!("-D{}=1", os_name))
-//        // Include directories
-//        .clang_arg("-ISDK/CHeaders/XPLM")
-//        .clang_arg("-ISDK/CHeaders/Widgets")
-//        .clang_args(sdk_version.args())
-//        // Add headers
-//        .header("src/combined.h")
-//        // Tests can't run because the XPLM stub library is not found
-//        .layout_tests(false)
-//        // Interpret all XPLM enum as constants
-//        // (like the headers)
-//        .constified_enum("*")
-//}
-
 /// On Mac OS and Windows targets, links the XPLM libraries
 fn link_libraries() {
     // Get the absolute path to this crate, so that linking will work when done in another folder
-    let crate_path = env::var_os("CARGO_MANIFEST_DIR").unwrap();
-    let crate_path = Path::new(&crate_path);
+    let crate_path = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
     let target = env::var("TARGET").unwrap();
 
     if target.contains("-apple-") {
