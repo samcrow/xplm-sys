@@ -13,11 +13,8 @@
 #include <XPLMDefs.h>
 #include <XPLMDisplay.h>
 #include <XPLMGraphics.h>
-// SDK 3.0-only headers
-#ifdef XPLM300
 #include <XPLMInstance.h>
 #include <XPLMMap.h>
-#endif
 #include <XPLMMenus.h>
 #include <XPLMNavigation.h>
 #include <XPLMPlanes.h>
