@@ -1,8 +1,6 @@
 use std::env;
 use std::path::PathBuf;
 
-extern crate bindgen;
-
 fn main() {
     link_libraries();
     use_bindgen();
