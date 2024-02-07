@@ -1,7 +1,7 @@
-use std::env;
-use std::path::PathBuf;
+use std::{env, fs, path::PathBuf};
 
 fn main() {
+    println!("cargo:rerun-if-changed=NULL");
     link_libraries();
     use_bindgen();
 }
@@ -37,15 +37,30 @@ fn link_libraries() {
 }
 
 fn use_bindgen() {
+    let file_combined = "src/combined.h";
+    let file_bindgen = "src/bindgen.rs";
+
     let bindings = bindgen::Builder::default()
-        .header("src/combined.h")
+        .header(file_combined)
         .layout_tests(false)
-        .clang_args(["-DXPLM200", "-DXPLM210", "-DXPLM300", "-DXPLM301", "-DXPLM303", "-DXPLM400", "-DLIN=1", "-ISDK/CHeaders/XPLM", "-ISDK/CHeaders/Widgets"])
+        .clang_arg("-ISDK/CHeaders/Widgets")
+        .clang_arg("-ISDK/CHeaders/XPLM")
+        .clang_arg("-DLIN=1")
+        .clang_arg("-DXPLM200")
+        .clang_arg("-DXPLM210")
+        .clang_arg("-DXPLM300")
+        .clang_arg("-DXPLM301")
+        .clang_arg("-DXPLM303")
+        .clang_arg("-DXPLM400")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("Unable to generate bindings");
 
+    fs::remove_file(file_bindgen)
+        .is_err()
+        .then(|| println!("Couldn't delete the file \"{}\"!", file_bindgen));
+
     bindings
-        .write_to_file("src/bindgen.rs")
+        .write_to_file(file_bindgen)
         .expect("Couldn't write bindings!");
 }

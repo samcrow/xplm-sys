@@ -8,7 +8,7 @@
 // according to those terms.
 
 // Allow C-like conventions
-#![allow(non_upper_case_globals,non_camel_case_types,non_snake_case)]
+#![allow(non_upper_case_globals, non_camel_case_types, non_snake_case)]
 
 mod bindgen;
 pub use bindgen::*;
