@@ -4,11 +4,9 @@ This library provides Rust bindings to the X-Plane plugin SDK.
 
 ## SDK versions ##
 
-This crate supports SDK version 3.0.3, which is supported on X-Plane 11.50 and later. Plugins can be used with earlier
-X-Plane versions as long as they do not use newer APIs.
+This crate supports SDK version 4.0.1, which is supported on X-Plane 12.04 and later. Plugins can be used with earlier X-Plane versions as long as they do not use newer APIs.
 
-Some features in earlier versions of the SDK have been removed. This library currently does not provide a way to access
-them.
+Some features in earlier versions of the SDK have been removed. This library currently does not provide a way to access them.
 
 ## Documentation ##
 
