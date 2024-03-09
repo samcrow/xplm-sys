@@ -1,7 +1,7 @@
-use std::{env, fs, path::PathBuf};
+use std::{env, path::PathBuf};
 
 fn main() {
-    println!("cargo:rerun-if-changed=NULL");
+    println!("cargo:rerun-if-changed=NULL"); // forces the build script to run even when no file changed and a previous build is existent.
     link_libraries();
     use_bindgen();
 }
@@ -55,10 +55,6 @@ fn use_bindgen() {
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("Unable to generate bindings");
-
-    fs::remove_file(file_bindgen)
-        .is_err()
-        .then(|| println!("Couldn't delete the file \"{}\"!", file_bindgen));
 
     bindings
         .write_to_file(file_bindgen)
