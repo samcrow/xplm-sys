@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0 - 2024-03-09
+
 * Readded build-time dependency on bindgen.
 * Updated to X-Plane SDK 4.0.1
 
