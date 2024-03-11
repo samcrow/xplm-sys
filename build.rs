@@ -1,5 +1,4 @@
-use std::{env, path::PathBuf};
-use std::path::Path;
+use std::{env, path::PathBuf, path::Path};
 
 fn main() {
     println!("cargo:rerun-if-changed=NULL"); // forces the build script to run even when no file changed and a previous build is existent.
@@ -7,7 +6,10 @@ fn main() {
     use_bindgen();
 }
 
-/// On macOS and Windows targets, links the XPLM libraries
+/// This function is responsible for linking the required libraries
+///
+/// The function determines the target operating system and adds the necessary
+/// search paths and library names to the build configuration using the `cargo` command.
 fn link_libraries() {
     let crate_path = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
     let target = env::var("TARGET").unwrap();
@@ -37,6 +39,11 @@ fn link_libraries() {
     }
 }
 
+/// Generates Rust bindings for a C header file using bindgen.
+///
+/// # Panics
+///
+/// This function will panic if it fails to generate the bindings.
 fn use_bindgen() {
     let path_combined = "src/combined.h";
     let out_dir = env::var("OUT_DIR").unwrap();
