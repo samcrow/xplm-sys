@@ -12,3 +12,5 @@
 
 mod bindgen;
 pub use bindgen::*;
+
+include!(concat!(env!("OUT_DIR"), "/bindgen.rs"));

@@ -1,4 +1,5 @@
 use std::{env, path::PathBuf};
+use std::path::Path;
 
 fn main() {
     println!("cargo:rerun-if-changed=NULL"); // forces the build script to run even when no file changed and a previous build is existent.
@@ -37,11 +38,12 @@ fn link_libraries() {
 }
 
 fn use_bindgen() {
-    let file_combined = "src/combined.h";
-    let file_bindgen = "src/bindgen.rs";
+    let path_combined = "src/combined.h";
+    let out_dir = env::var("OUT_DIR").unwrap();
+    let path_bindgen = Path::new(&out_dir).join("bindgen.rs");
 
     let bindings = bindgen::Builder::default()
-        .header(file_combined)
+        .header(path_combined)
         .layout_tests(false)
         .clang_arg("-ISDK/CHeaders/Widgets")
         .clang_arg("-ISDK/CHeaders/XPLM")
@@ -57,6 +59,6 @@ fn use_bindgen() {
         .expect("Unable to generate bindings");
 
     bindings
-        .write_to_file(file_bindgen)
+        .write_to_file(path_bindgen)
         .expect("Couldn't write bindings!");
 }
