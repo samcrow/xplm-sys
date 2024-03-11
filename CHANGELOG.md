@@ -1,6 +1,9 @@
 # xplm-sys changelog
 
-## Unreleased
+## 0.5.0 - 2024-03-11
+
+* Updated X-Plane SDK to Version 4.0.1
+* Re-added build-time dependency on bindgen.
 
 ## 0.5.0 - 2024-03-09
 
