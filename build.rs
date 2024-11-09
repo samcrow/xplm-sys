@@ -61,6 +61,7 @@ fn use_bindgen() {
         .clang_arg("-DXPLM301")
         .clang_arg("-DXPLM303")
         .clang_arg("-DXPLM400")
+        .clang_arg("-DXPLM410")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("Unable to generate bindings");
