@@ -1,5 +1,9 @@
 # xplm-sys changelog
 
+## 0.5.1 - 2024-11-13
+
+* Updated X-Plane SDK to version 4.1.1
+
 ## 0.5.0 - 2024-03-11
 
 * Updated X-Plane SDK to Version 4.0.1
